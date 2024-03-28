@@ -113,6 +113,46 @@ install_google_chrome() {
   print_installation_message_success Google-Chrome
 }
 
+# Tuxedo Control Center
+install_tuxedo_control_center() {
+  print_installation_message Tuxedo-Control-Center
+  wget https://deb.tuxedocomputers.com/ubuntu/pool/main/t/tuxedo-control-center/tuxedo-control-center_2.1.7_amd64.deb
+  apt -y install ./tuxedo-control-center_2.1.7_amd64.deb
+  print_installation_message_success Tuxedo-Control-Center
+}
+
+# Tuxedo Keyboard
+install_tuxedo_keyboard() {
+  print_installation_message Tuxedo-Keyboard
+  wget https://deb.tuxedocomputers.com/ubuntu/pool/main/t/tuxedo-keyboard/tuxedo-keyboard_3.1.4_all.deb
+  apt -y install ./tuxedo-keyboard_3.1.4_all.deb
+  print_installation_message_success Tuxedo-Keyboard
+}
+
+# xtreme download manager
+install_xdm() {
+  print_installation_message Xtreme-Download-Manager
+  wget https://github.com/subhra74/xdm/releases/download/8.0.29/xdman_gtk_8.0.29_amd64.deb
+  apt -y install ./xdman_gtk_8.0.29_amd64.deb
+  print_installation_message_success Xtreme-Download-Manager
+}
+
+# touchegg
+install_touchegg() {
+  print_installation_message Touchegg
+  wget https://github.com/JoseExposito/touchegg/releases/download/2.0.17/touchegg_2.0.17_amd64.deb
+  apt -y install ./touchegg_2.0.17_amd64.deb
+  cp ./touchegg.conf ~/.config/touchegg/touchegg.conf
+  print_installation_message_success Touchegg
+}
+
+# hidamari
+install_hidamari() {
+  print_installation_message Hidamari
+  flatpak -y install flathub io.github.jeffshee.Hidamari
+  print_installation_message_success Touchegg
+}
+
 # Chromium
 install_chromium() {
   print_installation_message Chromium
