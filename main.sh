@@ -150,14 +150,7 @@ install_touchegg() {
 install_hidamari() {
   print_installation_message Hidamari
   flatpak -y install flathub io.github.jeffshee.Hidamari
-  print_installation_message_success Touchegg
-}
-
-# Chromium
-install_chromium() {
-  print_installation_message Chromium
-  apt -y install chromium
-  print_installation_message_success Chromium
+  print_installation_message_success Hidamari
 }
 
 # Spotify
@@ -613,6 +606,15 @@ install_brave(){
   print_installation_message_success Brave
 }
 
+# lightdm
+install_lightdm() {
+  print_installation_message lightdm
+  apt -y install lightdm
+  apt -y install numlockx
+  apt -y install lightdm-gtk-greeter-settings
+  print_installation_message_success lightdm
+}
+
 cmd=(dialog --title "Debian 12 Installer" --separate-output --checklist 'Please choose: ' 27 76 16)
 options=(
   # A: Software Repositories
@@ -620,7 +622,7 @@ options=(
   A2 "Install Flatpak Repository" off
   # B: Internet
   B1 "Google Chrome" off
-  B2 "Chromium" off
+  B2 "xdm" off
   B3 "Spotify" off
   B4 "Opera" off
   B5 "Microsoft Edge" off
@@ -645,7 +647,10 @@ options=(
   D13 "Vim" off
   D14 "DataGrip" off
   # E: Environment
-  E1 "Gnome Tweak Tool & Extensions" off
+  E1 "Tuxedo-Control-Center" off
+  E2 "Tuxedo-Keyboard" off
+  E3 "touchegg" off
+  E4 "hidamari" off
   # F: Utility
   F1 "Dropbox" off
   F2 "KeePassXC" off
@@ -667,6 +672,7 @@ options=(
   H1 "LibreOffice" off
   H2 "Raindrop" off
   H3 "Anki" off
+  H4 "lightdm"
 )
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
@@ -684,7 +690,7 @@ for choice in $choices; do
     install_google_chrome
     ;;
   B2)
-    install_chromium
+    install_xdm
     ;;
   B3)
     install_spotify
@@ -754,7 +760,16 @@ for choice in $choices; do
     ;;
 
   E1)
-    install_gnome_tool
+    install_tuxedo_control_center
+    ;;
+  E2)
+    install_tuxedo_keyboard
+    ;;
+  E3)
+    install_touchegg
+    ;;
+  E4)
+    install_hidamari
     ;;
 
   F1)
@@ -812,6 +827,9 @@ for choice in $choices; do
     ;;
   H3)
     install_anki
+    ;;
+  H4)
+    lightdm
     ;;
   *)
   esac
