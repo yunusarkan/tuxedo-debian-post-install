@@ -105,6 +105,12 @@ install_flatpak() {
   print_installation_message_success Flatpak-Repository
 }
 
+#grub theme
+install_grub_theme
+  print_installation_message grub_theme
+  ./Vimix-grub/install.sh
+  print_installation_message_succes grub_theme
+
 # Google Chrome
 install_google_chrome() {
   print_installation_message Google-Chrome
