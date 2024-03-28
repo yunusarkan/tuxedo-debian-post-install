@@ -126,6 +126,7 @@ install_tuxedo_keyboard() {
   print_installation_message Tuxedo-Keyboard
   wget https://deb.tuxedocomputers.com/ubuntu/pool/main/t/tuxedo-keyboard/tuxedo-keyboard_3.1.4_all.deb
   apt -y install ./tuxedo-keyboard_3.1.4_all.deb
+  cp ./tuxedo_keyboard.conf /etc/modprobe.d/tuxedo_keyboard.conf
   print_installation_message_success Tuxedo-Keyboard
 }
 
@@ -172,15 +173,11 @@ install_opera() {
   print_installation_message_success Opera
 }
 
-# Microsoft-Edge
-install_microsoft_edge() {
-  print_installation_message Microsoft-Edge
-  curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor >microsoft.gpg
-  install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
-  sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge-dev.list'
-  rm microsoft.gpg
-  apt -y update && apt -y install microsoft-edge-stable
-  print_installation_message_success Microsoft-Edge
+# 7zip
+install_7zip() {
+  print_installation_message 7zip
+  apt -y install p7zip-full
+  print_installation_message_success 7zip
 }
 
 # Zoom
@@ -620,13 +617,14 @@ options=(
   # A: Software Repositories
   A1 "Install Snap Repository" off
   A2 "Install Flatpak Repository" off
+  A3 "7zip" off
+  
   # B: Internet
   B1 "Google Chrome" off
   B2 "xdm" off
   B3 "Spotify" off
   B4 "Opera" off
-  B5 "Microsoft Edge" off
-  B6 "Brave" off
+  B5 "Brave" off
   # C: Chat Application
   C1 "Zoom Meeting Client" off
   C2 "Discord" off
@@ -685,6 +683,9 @@ for choice in $choices; do
   A2)
     install_flatpak
     ;;
+  A3)
+    install_7zip
+    ;;
 
   B1)
     install_google_chrome
@@ -699,9 +700,6 @@ for choice in $choices; do
     install_opera
     ;;
   B5)
-    install_microsoft_edge
-    ;;
-  B6)
     install_brave
     ;;
 
