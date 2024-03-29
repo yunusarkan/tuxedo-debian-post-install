@@ -106,16 +106,28 @@ install_flatpak() {
 }
 
 #grub theme
-install_grub_theme
+install_grub_theme() {
   print_installation_message grub_theme
-  ./Vimix-grub/install.sh
-  print_installation_message_succes grub_theme
+  chmod +rwx ~/Downloads/tuxedo-debian-post-install-main/Vimix-grub/install.sh
+  /bin/bash  ~/Downloads/tuxedo-debian-post-install-main/Vimix-grub/install.sh
+  rm -rf /usr/share/desktop-base/
+  print_installation_message_success grub_theme
+}
+
+# yakuake
+install_yakuake() {
+  print_installation_message yakuake
+  apt -y install yakuake
+  print_installation_message_success yakuake
+}
+
 
 # Google Chrome
 install_google_chrome() {
   print_installation_message Google-Chrome
   wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   apt -y install ./google-chrome-stable_current_amd64.deb
+  apt -y remove firefox-esr
   print_installation_message_success Google-Chrome
 }
 
@@ -132,7 +144,7 @@ install_tuxedo_keyboard() {
   print_installation_message Tuxedo-Keyboard
   wget https://deb.tuxedocomputers.com/ubuntu/pool/main/t/tuxedo-keyboard/tuxedo-keyboard_3.1.4_all.deb
   apt -y install ./tuxedo-keyboard_3.1.4_all.deb
-  cp ./tuxedo_keyboard.conf /etc/modprobe.d/tuxedo_keyboard.conf
+  echo "options tuxedo_keyboard mode=0 color_left=0xFF0000 color_center=0xFF0000 color_right=0xFF0000" > /etc/modprobe.d/tuxedo_keyboard.conf
   print_installation_message_success Tuxedo-Keyboard
 }
 
@@ -149,7 +161,8 @@ install_touchegg() {
   print_installation_message Touchegg
   wget https://github.com/JoseExposito/touchegg/releases/download/2.0.17/touchegg_2.0.17_amd64.deb
   apt -y install ./touchegg_2.0.17_amd64.deb
-  cp ./touchegg.conf ~/.config/touchegg/touchegg.conf
+  mkdir ~/.config/touchegg/
+  mv ~/Downloads/tuxedo-debian-post-install-main/touchegg.conf ~/.config/touchegg/touchegg.conf
   print_installation_message_success Touchegg
 }
 
@@ -159,6 +172,19 @@ install_hidamari() {
   flatpak -y install flathub io.github.jeffshee.Hidamari
   print_installation_message_success Hidamari
 }
+
+# whatsapp
+install_whatsapp() {
+  print_installation_message whatsapp
+  flatpak -y install  flathub com.github.eneshecan.WhatsAppForLinux
+  print_installation_message_success whatsapp
+}
+
+#pycharm
+install_pycharm() {
+  print_installation_message pycharm
+  flatpak -y install flathub com.jetbrains.PyCharm-Community
+  print_installation_message_success pycharm
 
 # Spotify
 install_spotify() {
@@ -622,24 +648,25 @@ cmd=(dialog --title "Debian 12 Installer" --separate-output --checklist 'Please 
 options=(
   # A: Software Repositories
   A1 "Install Snap Repository" off
-  A2 "Install Flatpak Repository" off
-  A3 "7zip" off
-  
+  A2 "Install Flatpak Repository" on
+  A3 "7zip" on
+  A4 "GRUB Theme" on
   # B: Internet
-  B1 "Google Chrome" off
-  B2 "xdm" off
-  B3 "Spotify" off
+  B1 "Google Chrome" on
+  B2 "xdm" on
+  B3 "Spotify" on
   B4 "Opera" off
   B5 "Brave" off
   # C: Chat Application
   C1 "Zoom Meeting Client" off
-  C2 "Discord" off
+  C2 "Discord" on
   C3 "Thunderbird Mail" off
+  C4 "Whatsapp" on
   # D: Development
-  D1 "GIT" off
+  D1 "GIT" on
   D2 "JAVA" off
   D3 "GO" off
-  D4 "Microsoft Visual Studio Code" off
+  D4 "Microsoft Visual Studio Code" on
   D5 "IntelliJ IDEA Ultimate" off
   D6 "GoLand" off
   D7 "Postman" off
@@ -650,11 +677,12 @@ options=(
   D12 "Putty" off
   D13 "Vim" off
   D14 "DataGrip" off
+  D15 "pycharm" on
   # E: Environment
-  E1 "Tuxedo-Control-Center" off
-  E2 "Tuxedo-Keyboard" off
-  E3 "touchegg" off
-  E4 "hidamari" off
+  E1 "Tuxedo-Keyboard" on
+  E2 "Tuxedo-Control-Center" on
+  E3 "touchegg" on
+  E4 "hidamari" on
   # F: Utility
   F1 "Dropbox" off
   F2 "KeePassXC" off
@@ -665,6 +693,7 @@ options=(
   F7 "OpenVPN" off
   F8 "Timeshift" off
   F9 "Gparted" off
+  F10 "yakuake" on
   # G: Image, Video and Audio
   G1 "GIMP" off
   G2 "Droidcam" off
@@ -676,7 +705,7 @@ options=(
   H1 "LibreOffice" off
   H2 "Raindrop" off
   H3 "Anki" off
-  H4 "lightdm"
+  H4 "lightdm" on
 )
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
@@ -691,6 +720,9 @@ for choice in $choices; do
     ;;
   A3)
     install_7zip
+    ;;
+  A4)
+    install_grub_theme
     ;;
 
   B1)
@@ -717,6 +749,9 @@ for choice in $choices; do
     ;;
   C3)
     install_thunderbird
+    ;;
+  C4)
+    install_whatsapp
     ;;
 
   D1)
@@ -762,12 +797,15 @@ for choice in $choices; do
   D14)
     install_datagrip
     ;;
+  D15)
+    install_pycharm
+    ;;
 
   E1)
-    install_tuxedo_control_center
+    install_tuxedo_keyboard
     ;;
   E2)
-    install_tuxedo_keyboard
+    install_tuxedo_control_center
     ;;
   E3)
     install_touchegg
@@ -803,6 +841,9 @@ for choice in $choices; do
   F9)
     install_gparted
     ;;
+  F10)
+    install_yakuake
+    ;;
 
   G1)
     install_gimp
@@ -833,7 +874,7 @@ for choice in $choices; do
     install_anki
     ;;
   H4)
-    lightdm
+    install_lightdm
     ;;
   *)
   esac
