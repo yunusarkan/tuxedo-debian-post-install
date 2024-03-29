@@ -185,6 +185,7 @@ install_pycharm() {
   print_installation_message pycharm
   flatpak -y install flathub com.jetbrains.PyCharm-Community
   print_installation_message_success pycharm
+}
 
 # Spotify
 install_spotify() {
@@ -648,7 +649,7 @@ cmd=(dialog --title "Debian 12 Installer" --separate-output --checklist 'Please 
 options=(
   # A: Software Repositories
   A1 "Install Snap Repository" off
-  A2 "Install Flatpak Repository" on
+  A2 "Install Flatpak Repository" off
   A3 "7zip" on
   A4 "GRUB Theme" on
   # B: Internet
@@ -660,13 +661,13 @@ options=(
   # C: Chat Application
   C1 "Zoom Meeting Client" off
   C2 "Discord" on
-  C3 "Thunderbird Mail" off
-  C4 "Whatsapp" on
+  C3 "Thunderbird Mail" on
+  C4 "Whatsapp" off
   # D: Development
   D1 "GIT" on
   D2 "JAVA" off
   D3 "GO" off
-  D4 "Microsoft Visual Studio Code" on
+  D4 "Microsoft Visual Studio Code" off
   D5 "IntelliJ IDEA Ultimate" off
   D6 "GoLand" off
   D7 "Postman" off
@@ -677,12 +678,12 @@ options=(
   D12 "Putty" off
   D13 "Vim" off
   D14 "DataGrip" off
-  D15 "pycharm" on
+  D15 "pycharm" off
   # E: Environment
   E1 "Tuxedo-Keyboard" on
   E2 "Tuxedo-Control-Center" on
-  E3 "touchegg" on
-  E4 "hidamari" on
+  E3 "touchegg" off
+  E4 "hidamari" off
   # F: Utility
   F1 "Dropbox" off
   F2 "KeePassXC" off
