@@ -705,7 +705,7 @@ options=(
   H1 "LibreOffice" off
   H2 "Raindrop" off
   H3 "Anki" off
-  H4 "lightdm" on
+  H4 "lightdm" off
 )
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
